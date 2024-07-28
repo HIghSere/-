@@ -52,7 +52,7 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                 }
                 catch (error) {
                     if (error.code === "ECONNABORTED") {
-                        console.error(`${yellow}Connection time out${white}`);
+                        console.error(`${yellow}△${white} Connection time out.`);
                     }
                     console.log(`${yellow}△${white}${proxy.trim()} is timed out.`);
                 }
@@ -86,7 +86,7 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                 }
                 catch (error) {
                     if (error.code === "ECONNABORTED") {
-                        console.error(`${yellow}Connection time out${white}`);
+                        console.error(`${yellow}△${white} Connection time out.`);
                     }
                     else {
                         console.log(`${yellow}△${white} Connection time out.`);
