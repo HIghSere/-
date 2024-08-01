@@ -34,7 +34,7 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                         url: targetUrl,
                         method: requestType,
                         headers: {
-                            "User-Agent": (0, ua_gen_1.UAGen)(),
+                            "User-Agent": (0, ua_gen_1.UAGen)().trim(),
                         },
                         proxy: {
                             host: host,
@@ -72,7 +72,7 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                         url: targetUrl,
                         method: requestType,
                         headers: {
-                            "User-Agent": (0, ua_gen_1.UAGen)(),
+                            "User-Agent": (0, ua_gen_1.UAGen)().trim(),
                         },
                         timeout: 3000,
                     }).then((response) => {
