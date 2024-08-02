@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const worker_threads_1 = require("worker_threads");
+const https_proxy_agent_1 = require("https-proxy-agent");
 const axios_1 = __importDefault(require("axios"));
 //import functions files
 const sleep_1 = require("../util/sleep");
@@ -36,10 +37,7 @@ function layer7_worker(targetUrl, requestType, proxySelect, interval, time, thre
                         headers: {
                             "User-Agent": (0, ua_gen_1.UAGen)().trim(),
                         },
-                        proxy: {
-                            host: host.trim(),
-                            port: parseInt(port.trim()),
-                        },
+                        httpsAgent: new https_proxy_agent_1.HttpsProxyAgent(`http://${host.trim()}:${parseInt(port.trim())}`),
                         timeout: 3000,
                     }).then((response) => {
                         if (response.status === 200) {
